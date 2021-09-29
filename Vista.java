@@ -64,6 +64,11 @@ import java.util.Scanner;
         System.out.println("Ha ocurrido un error al ejecutar el programa.");
     }
 
+    /** 
+     * Metodo que pide el tipo de combatiente del jugador
+     * @return String
+     * @throws Exception
+     */
     public String pedirTipo() throws Exception{
         String tipo = "";
         
@@ -79,6 +84,11 @@ import java.util.Scanner;
         return tipo;
     }
 
+    /** 
+     * Metodo que pide el objetivo de un ataque de un combatiente
+     * @return int
+     * @throws Exception
+     */
     public int pedirObjetivo() throws Exception{
         int id = 0;
 
@@ -92,6 +102,11 @@ import java.util.Scanner;
         return id;
     }
 
+    /** 
+     * Metodo que pide la habilidad especial a usar por un combatiente
+     * @return String
+     * @throws Exception
+     */
     public String pedirHabilidad() throws Exception{
         String habilidad = "";
 
@@ -115,30 +130,58 @@ import java.util.Scanner;
         return habilidad;
     }
 
+    /** 
+     * Metodo que imprime el mensaje de inicio
+     * @param msg
+     */
     public void msgIncio(String msg){
         System.out.println(msg);
     }
 
+    /** 
+     * Metodo que imprime el mensaje de muerte
+     * @param msg
+     */
     public void msgMuerte(String msg){
         System.out.println(msg);
     }
 
+    /** 
+     * Metodo que imprime el resultado del juego
+     * @param msg
+     */
     public void mostrarResultado(String msg){
         System.out.println(msg);
     }
-
+ 
+    /** 
+     * Metodo que imprime el mensaje de victoria
+     * @param msg
+     */
     public void msgVictoria(String msg){
         System.out.println(msg);
     }
-
+ 
+    /** 
+     * Metodo que imprime el mensaje de derrota
+     * @param msg
+     */
     public void msgDerrota(String msg){
         System.out.println(msg);
     }
-
+ 
+    /** 
+     * Metodo que imprime el historial del juego
+     * @param historial
+     */
     public void historial(String historial){
         System.out.println(historial);
     }
 
+    /** Metodo que imprime la cantidad de turnos del juego
+     * @param t
+     * @return String
+     */
     public String turnos(int t){
         String turnos = "La cantidad de turnos que duro esta partida fue: "+t;
         return turnos;

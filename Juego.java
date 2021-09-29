@@ -1,7 +1,19 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Clase Juego
+ * Encargada de simular el juego, llevar a cabo las jugadas y manejar los combatientes.
+ * 
+ * @version 1.0, 27/09/2021
+ * finalizacion 28/09/2021
+ * 
+ * @author Diego E. Lemus L. - 21469
+ */
+
 public class Juego {
+
+    //-----PROPIEDADES-----
     private Random rand = new Random();
     private ArrayList<Combatiente> combatientes = new ArrayList<Combatiente>();
     private ArrayList<Enemigo> enemigos = new ArrayList<Enemigo>();
@@ -9,20 +21,37 @@ public class Juego {
     private ArrayList<String> historial = new ArrayList<String>();
     private boolean gameover = false;
 
+    //-----METODOS-----
+    /** 
+     * Metodo constructor del juego
+     */
     public Juego(){
         for(int i=0;i<3;i++){
             historial.add("");
         }
+        for (int i = 0; i < 5; i++){
+            combatientes.add(null);
+        }
     }
     
+    /** 
+     * Metodo para determinar una accion
+     * @param a
+     */
     public void accion(String a){
         historial.add(a);
     }
     
+    /** 
+     * Metodo para generar enemigos
+     * @return String
+     */
     public String generarEnemigos(){
         String msg = "";
+        //Numero random para la distribucion de enemigos
         int num =  rand.nextInt(3)+1;
 
+        //caso 1
         if(num==3){
             Enemigo duende = new Enemigo("Duende");
             enemigos.add(duende);
@@ -34,6 +63,7 @@ public class Juego {
             enemigos.add(duende3);
             msg += duende3.getMsgInicio();
         }
+        //caso 2
         if(num==2){
             Enemigo duende = new Enemigo("Duende");
             enemigos.add(duende);
@@ -45,6 +75,7 @@ public class Juego {
             enemigos.add(hechicero);
             msg += hechicero.getMsgInicio();
         }
+        //caso 3
         if(num==1){
             Enemigo duende = new Enemigo("Duende");
             enemigos.add(duende);
@@ -59,15 +90,21 @@ public class Juego {
         return msg;
     }
 
+    /** 
+     * Metodo para generar jefe enemigo
+     * @return String
+     */
     public String generarJefeEnemigo(){
         String msg = "";
         int num =  rand.nextInt(2)+1;
         
         if(num==1){
+            //Jefe Duende
             Enemigo jefe = new Jefe("Duende");
             enemigos.add(jefe);
             msg = "Se ha generado un nuevo jefe "+jefe.getTipo();
         }else if(num==2){
+            //Jefe Hechicero
             Enemigo jefe = new Jefe("Hechicero");
             enemigos.add(jefe);
             msg = "Se ha generado un nuevo jefe "+jefe.getTipo();
@@ -75,17 +112,24 @@ public class Juego {
         return msg;
     }
 
+    /** 
+     * Metodo para mostrar el historial de la partida
+     * @return String
+     * @throws Exception
+     */
     public String mostrarHistorial() throws Exception{
         String historialS = "";
 
         try{
             int historialT = this.historial.size();
+            //Se agregan las ultimas 3 acciones del juego
             if(historialT>1){
                 for (int i = historialT-1; i >= historialT-3; i--)
                     if (this.historial.get(i) != null)
                         historialS += this.historial.get(i) + "\n";
             }else{
-                historialS = "No se ha realziado ninguna accion todavia.";
+                //En caso de no haberse realizado ninguna accion
+                historialS = "No se ha realizado ninguna accion todavia.";
             }
         }catch(Exception e){
             String s = "Error en el historial " + e.getMessage();
@@ -94,9 +138,16 @@ public class Juego {
         return historialS;
     }
 
+    /** 
+     * Metodo para atacar
+     * @param obj
+     * @param id
+     * @throws Exception
+     */
     public void atacar(Combatiente obj, int id) throws Exception{
         try{
             if(combatientes.get(id) != null){
+                //ataque de combatiente
                 String ataque = combatientes.get(id).ataque(obj);
                 accion(ataque);
             }
@@ -106,10 +157,17 @@ public class Juego {
         }
     }
 
+    /** 
+     * Metodo para obtener el objetivo del ataque
+     * @param obj
+     * @return Combatiente
+     * @throws Exception
+     */
     public Combatiente getObjetivo(int obj) throws Exception{
         Combatiente combatiente = null;
 
         try{
+            //Se obtiene el objetivo en base al id (orden)
             combatiente = combatientes.get(obj);
         } catch (Exception e){
             String s = "Error al seleccionar objetivo" + e.getMessage();
@@ -118,9 +176,17 @@ public class Juego {
         return combatiente;
     }
 
+    /** 
+     * Metodo para usar la habilidad del combatiente
+     * @param hab
+     * @param obj
+     * @param id
+     * @throws Exception
+     */
     public void usarHabilidad(String hab, Combatiente obj, int id) throws Exception{
         try{
             if(combatientes.get(id) != null){
+                //uso de habilidad
                 String habilidad = combatientes.get(id).habilidad(hab, obj);
                 accion(habilidad);
             }
@@ -129,10 +195,15 @@ public class Juego {
             throw new Exception(s);
         }
     }
-
+ 
+    /** 
+     * Metodo para determinar derrota del combatiente
+     * @return String
+     */
     public String derrota(){
         String derrotas = "";
 
+        //Se verifica las vidas de todos los combatientes
         for (int i = 0; i < combatientes.size(); i++){
             if(combatientes.get(i) != null){
                 if (combatientes.get(i).getVida() <= 0){
@@ -147,6 +218,7 @@ public class Juego {
                 }
             }
         }
+        //Si solo queda 1 enemigo se genera el jefe
         if(cantEnemigos==1){
             generarJefeEnemigo();
         }
@@ -154,8 +226,13 @@ public class Juego {
         return derrotas;
     }
 
+    /** 
+     * Metodo para mostrar los resultados de la partida
+     * @return String
+     */
     public String resultado(){
         String resultado = "";
+        //En caso de que el jugador gane
         if(cantEnemigos == 0){
             resultado = combatientes.get(0).getMsgVictoria();
         }else if(gameover == true){
@@ -165,6 +242,7 @@ public class Juego {
                 }
             }
         }else{
+            //en caso de que los enemigos ganen
             for (int i = 1; i < combatientes.size(); i++){
                 if(enemigos.get(i) != null){
                     resultado += "\n" + combatientes.get(i).getMsgVictoria();
@@ -174,11 +252,18 @@ public class Juego {
         return resultado;
     }
 
+    /** 
+     * Metodo para pasar el turno
+     */
     public void pasarTurno(){
         String msg = "Se ha elegido pasar turno";
         accion(msg);
     }
 
+    /** 
+     * Metodo para determinar si el jugador gano o perdio la partida
+     * @return boolean
+     */
     public boolean getGame(){
         return gameover;
     }
